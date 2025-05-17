@@ -1,7 +1,8 @@
 import sys
+import pytz
 from typing import Optional, List
 from polygon import RESTClient
-from datetime import date, timedelta
+from datetime import datetime
 from stock_secrets import polygon_key
 
 class Agg:
@@ -32,7 +33,7 @@ class Agg:
 
 def getAggregateData(startDate) -> List[Agg]:
   client = RESTClient(polygon_key)
-  today = date.today()
+  today = datetime.today()
 
   aggs = []
   for a in client.list_aggs(
@@ -51,7 +52,7 @@ def printVWAPData(aggs: List[Agg]):
   count = 0
   total = 0
   for agg in aggs:
-    vwapDate = date.fromtimestamp(agg.timestamp / 1000) + timedelta(days=1)
+    vwapDate = datetime.fromtimestamp(agg.timestamp / 1000.0).astimezone(pytz.utc)
     vwapDateFormatted = vwapDate.strftime("%m/%d")
     vwapValue = agg.vwap
 
