@@ -1,3 +1,4 @@
+import sys
 from typing import Optional, List
 from polygon import RESTClient
 from datetime import date, timedelta
@@ -63,7 +64,10 @@ def printVWAPData(aggs: List[Agg]):
 
 
 if __name__ == "__main__":
-  start_date = input("Enter the start date: ")
+  if len(sys.argv) > 1:
+    start_date = sys.argv[1]
+  else:
+    start_date = input("Enter the start date: ")
 
   data = getAggregateData(start_date)
   printVWAPData(data)
