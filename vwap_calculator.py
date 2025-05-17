@@ -1,6 +1,7 @@
 from typing import Optional, List
 from polygon import RESTClient
 from datetime import date, timedelta
+from stock_secrets import polygon_key
 
 class Agg:
   "Contains aggregate data for a given ticker symbol over a given date range in a custom time window size."
@@ -29,7 +30,7 @@ class Agg:
     )
 
 def getAggregateData(startDate) -> List[Agg]:
-  client = RESTClient("KEY HERE")
+  client = RESTClient(polygon_key)
   today = date.today()
 
   aggs = []
