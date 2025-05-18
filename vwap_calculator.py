@@ -31,7 +31,7 @@ class Agg:
       d.get("otc", None),
     )
 
-def getAggregateData(startDate) -> List[Agg]:
+def get_aggregate_data(startDate) -> List[Agg]:
   client = RESTClient(polygon_key)
   today = datetime.today()
 
@@ -70,5 +70,5 @@ if __name__ == "__main__":
   else:
     start_date = input("Enter the start date: ")
 
-  data = getAggregateData(start_date)
+  data = get_aggregate_data(start_date)
   printVWAPData(data)
