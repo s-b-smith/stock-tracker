@@ -5,11 +5,11 @@ from pynput import keyboard
 seconds_in_an_hour = 3600
 seconds_in_a_day = seconds_in_an_hour * 24
 
-def printn(string: str):
+def printn(string: str) -> None:
     print(string + "\n")
 
-def create_ctrl_c_exit_listener(with_web_socket: bool = False):
-    def on_key_press(key):
+def create_ctrl_c_exit_listener(with_web_socket: bool = False) -> None:
+    def on_key_press(key) -> None:
         try:
             if key.char == '\x03':
                 print("\nQuitting...")
@@ -21,7 +21,7 @@ def create_ctrl_c_exit_listener(with_web_socket: bool = False):
         except AttributeError:
             pass
 
-    def start_listener():
+    def start_listener() -> None:
         with keyboard.Listener(on_press=on_key_press) as listener:
             listener.join()
     
