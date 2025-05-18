@@ -2,8 +2,8 @@ import os
 import threading
 from pynput import keyboard
 
-secondsInAnHour = 3600
-secondsInADay = secondsInAnHour * 24
+seconds_in_an_hour = 3600
+seconds_in_a_day = seconds_in_an_hour * 24
 
 def printn(string: str):
     print(string + "\n")
