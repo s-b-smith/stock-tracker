@@ -8,7 +8,7 @@ from typing import List
 
 from vwap_calculator import Agg, get_aggregate_data
 from stock_secrets import *
-from utils import seconds_in_a_day, printn, create_ctrl_c_exit_listener
+from utils import seconds_in_a_day, printn, create_esc_exit_listener
 from twilio_send_sms import send_SMS_message
 
 TARGET_AVG = 251.00
@@ -73,7 +73,7 @@ def get_time_in_seconds_until_5PM(current_time: datetime) -> float:
   return (target_datetime - current_time).total_seconds()
 
 if __name__ == "__main__":
-  create_ctrl_c_exit_listener()
+  create_esc_exit_listener()
 
   if len(sys.argv) > 1:
     start_date = sys.argv[1]

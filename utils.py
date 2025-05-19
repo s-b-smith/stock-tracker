@@ -10,10 +10,10 @@ seconds_in_a_day = seconds_in_an_hour * 24
 def printn(string: str) -> None:
     print(string + "\n")
 
-def create_ctrl_c_exit_listener(with_web_socket: bool = False) -> None:
+def create_esc_exit_listener(with_web_socket: bool = False) -> None:
     def on_key_press(key) -> None:
         try:
-            if key.char == CTRL_C:
+            if key == keyboard.Key.esc:
                 print("\nQuitting...")
                 if (with_web_socket):
                     global ws
