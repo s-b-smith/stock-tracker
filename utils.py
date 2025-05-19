@@ -2,6 +2,8 @@ import os
 import threading
 from pynput import keyboard
 
+CTRL_C = '\x03'
+
 seconds_in_an_hour = 3600
 seconds_in_a_day = seconds_in_an_hour * 24
 
@@ -11,11 +13,11 @@ def printn(string: str) -> None:
 def create_ctrl_c_exit_listener(with_web_socket: bool = False) -> None:
     def on_key_press(key) -> None:
         try:
-            if key.char == '\x03':
+            if key.char == CTRL_C:
                 print("\nQuitting...")
                 if (with_web_socket):
                     global ws
-                    if ws is not None:
+                    if ws:
                         ws.close()
                 os._exit(0)
         except AttributeError:
