@@ -87,16 +87,10 @@ if __name__ == "__main__":
     iteration_time_string = iteration_timestamp.strftime("%m/%d/%Y %H:%M:%S")
 
     is_a_weekend = iteration_timestamp.weekday() in [5, 6]
-    if (is_a_weekend):
-      print(iteration_time_string)
-      printn("Waiting til Monday...")
-      time.sleep(seconds_in_a_day)
-      continue
-
     is_after_5PM = iteration_timestamp.hour >= 17
-    if (is_after_5PM):
+    if (is_a_weekend or is_after_5PM):
       print(iteration_time_string)
-      printn("Waiting til tomorrow...")
+      printn("Waiting 12 hours...")
       time.sleep(seconds_in_a_day / 2)
       continue
 
