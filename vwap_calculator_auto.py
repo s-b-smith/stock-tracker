@@ -13,6 +13,7 @@ from twilio_send_sms import send_SMS_message
 
 TARGET_AVG = 251.00
 FIVE_PM = '17:00:00'
+TEN_AM = '10:00:00'
   
 class VWAP:
   date: datetime
@@ -66,8 +67,8 @@ def get_VWAP_data_string(vwap_result: VWAPResult) -> str:
 
   return data
 
-def get_time_in_seconds_until_5PM(current_time: datetime) -> float:
-  target_time = datetime.strptime(FIVE_PM, "%H:%M:%S").time()
+def get_time_in_seconds_until_target_time(current_time: datetime, target_time_string: str) -> float:
+  target_time = datetime.strptime(target_time_string, "%H:%M:%S").time()
   target_datetime = datetime.combine(current_time.date(), target_time)
   
   return (target_datetime - current_time).total_seconds()
@@ -87,17 +88,17 @@ if __name__ == "__main__":
     iteration_time_string = iteration_timestamp.strftime("%m/%d/%Y %H:%M:%S")
 
     is_a_weekend = iteration_timestamp.weekday() in [5, 6]
-    is_after_5PM = iteration_timestamp.hour >= 17
-    if (is_a_weekend or is_after_5PM):
+    is_after_10AM = iteration_timestamp.hour >= 10
+    if (is_a_weekend or is_after_10AM):
       print(iteration_time_string)
       printn("Waiting 12 hours...")
       time.sleep(seconds_in_a_day / 2)
       continue
 
-    time_in_seconds_until_5PM = get_time_in_seconds_until_5PM(iteration_timestamp)
+    time_in_seconds_until_10AM = get_time_in_seconds_until_target_time(iteration_timestamp, TEN_AM)
     print(iteration_time_string)
-    printn("Waiting til 5pm...")
-    time.sleep(time_in_seconds_until_5PM)
+    printn("Waiting til 10am...")
+    time.sleep(time_in_seconds_until_10AM)
 
     staged_result = VWAPResult([], TARGET_AVG)
     while (staged_result.avg >= TARGET_AVG):
