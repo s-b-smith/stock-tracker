@@ -8,13 +8,14 @@ from typing import List
 
 from vwap_calculator import Agg, get_aggregate_data
 from stock_secrets import *
-from utils import seconds_in_a_day, printn, create_esc_exit_listener
+from utils import printn, create_esc_exit_listener
 from twilio_send_sms import send_SMS_message
 from send_email import send_email_to_myself
 
 TARGET_AVG = 251.00
 FIVE_PM = '17:00:00'
 TEN_AM = '10:00:00'
+JUST_BEFORE_MIDNIGHT = '23:59:59'
   
 class VWAP:
   date: datetime
@@ -91,9 +92,11 @@ if __name__ == "__main__":
     is_a_weekend = iteration_timestamp.weekday() in [5, 6]
     is_after_10AM = iteration_timestamp.hour >= 10
     if (is_a_weekend or is_after_10AM):
+      time_in_seconds_until_midnight = get_time_in_seconds_until_target_time(iteration_timestamp, JUST_BEFORE_MIDNIGHT) + 1
+
       print(iteration_time_string)
-      printn("Waiting 12 hours...")
-      time.sleep(seconds_in_a_day / 2)
+      printn("Waiting til tomorrow...")
+      time.sleep(time_in_seconds_until_midnight)
       continue
 
     time_in_seconds_until_10AM = get_time_in_seconds_until_target_time(iteration_timestamp, TEN_AM)
