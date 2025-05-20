@@ -10,6 +10,7 @@ from vwap_calculator import Agg, get_aggregate_data
 from stock_secrets import *
 from utils import seconds_in_a_day, printn, create_esc_exit_listener
 from twilio_send_sms import send_SMS_message
+from send_email import send_email_to_myself
 
 TARGET_AVG = 251.00
 FIVE_PM = '17:00:00'
@@ -113,4 +114,5 @@ if __name__ == "__main__":
     print(datetime.now().strftime("%m/%d/%Y %H:%M:%S"))
     printn(string_result)
     # TODO: Waiting on verification for this to work
-    send_SMS_message(string_result, twilio_to_phone_number)
+    # send_SMS_message(string_result, twilio_to_phone_number)
+    send_email_to_myself(string_result, f"{iteration_timestamp.strftime("%m/%d")} VWAP Update")
