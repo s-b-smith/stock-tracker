@@ -101,8 +101,16 @@ if __name__ == "__main__":
     printn("Waiting til 10am...")
     time.sleep(time_in_seconds_until_10AM)
 
+    avg_has_dropped_below_target = None
+    avg_found = True
+
     staged_result = VWAPResult([], TARGET_AVG)
     while (staged_result.avg >= TARGET_AVG):
+      if (avg_has_dropped_below_target is None):
+        avg_has_dropped_below_target = True
+      elif (avg_has_dropped_below_target):
+        avg_has_dropped_below_target = False
+
       final_result = copy.deepcopy(staged_result)
 
       agg_data = get_aggregate_data(start_date.strftime("%Y-%m-%d"))
@@ -110,7 +118,25 @@ if __name__ == "__main__":
       start_date = start_date - timedelta(days=1)
     start_date = start_date + timedelta(days=2)
 
-    string_result = get_VWAP_data_string(final_result)
+    if (avg_has_dropped_below_target):
+      staged_result = VWAPResult([], TARGET_AVG)
+      final_result = copy.deepcopy(staged_result)
+      # Only check 2 days after original start date, quit if target avg isn't found
+      avg_found = False
+      for i in range(2):
+        agg_data = get_aggregate_data(start_date.strftime("%Y-%m-%d"))
+        staged_result = calculate_VWAP_result(agg_data)
+        if (staged_result.avg >= TARGET_AVG):
+          avg_found = True
+          final_result = copy.deepcopy(staged_result)
+          break
+
+        start_date = start_date + timedelta(days=1)
+
+    if (not avg_found):
+      string_result = "Couldn't calculate date range with target average...please evaluate and restart"
+    else:
+      string_result = get_VWAP_data_string(final_result)
     print(datetime.now().strftime("%m/%d/%Y %H:%M:%S"))
     printn(string_result)
     # TODO: Waiting on verification for this to work
