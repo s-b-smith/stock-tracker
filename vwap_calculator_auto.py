@@ -11,11 +11,9 @@ from stock_secrets import *
 from utils import printn, create_esc_exit_listener
 from twilio_send_sms import send_SMS_message
 from send_email import send_email_to_myself
+from dates import *
 
 TARGET_AVG = 251.00
-FIVE_PM = '17:00:00'
-TEN_AM = '10:00:00'
-JUST_BEFORE_MIDNIGHT = '23:59:59'
   
 class VWAP:
   date: datetime
@@ -53,6 +51,18 @@ def calculate_VWAP_result(aggs: List[Agg]) -> VWAPResult:
 
   return VWAPResult(vwap_objs, avg)
 
+def calculate_vest_date(count: int) -> str:
+  est_vest_date = datetime.today()
+  while (count < 20):
+    is_weekend = is_a_weekend(est_vest_date)
+    is_holiday = is_us_holiday(est_vest_date)
+
+    est_vest_date = est_vest_date + timedelta(days=1)
+    if (not is_weekend and not is_holiday):
+      count += 1
+  
+  return est_vest_date.strftime("%m/%d")
+
 def get_VWAP_data_string(vwap_result: VWAPResult) -> str:
   data = ''
 
@@ -67,13 +77,10 @@ def get_VWAP_data_string(vwap_result: VWAPResult) -> str:
 
   data += f"\nAVG: ${vwap_result.avg}"
 
-  return data
+  estimated_vest_date = calculate_vest_date(count)
+  data += f"\nEST VEST DATE: {estimated_vest_date}"
 
-def get_time_in_seconds_until_target_time(current_time: datetime, target_time_string: str) -> float:
-  target_time = datetime.strptime(target_time_string, "%H:%M:%S").time()
-  target_datetime = datetime.combine(current_time.date(), target_time)
-  
-  return (target_datetime - current_time).total_seconds()
+  return data
 
 if __name__ == "__main__":
   create_esc_exit_listener()
@@ -89,9 +96,9 @@ if __name__ == "__main__":
     iteration_timestamp = datetime.now()
     iteration_time_string = iteration_timestamp.strftime("%m/%d/%Y %H:%M:%S")
 
-    is_a_weekend = iteration_timestamp.weekday() in [5, 6]
+    is_weekend = is_a_weekend(iteration_timestamp)
     is_after_10AM = iteration_timestamp.hour >= 10
-    if (is_a_weekend or is_after_10AM):
+    if (is_weekend or is_after_10AM):
       time_in_seconds_until_midnight = get_time_in_seconds_until_target_time(iteration_timestamp, JUST_BEFORE_MIDNIGHT) + 1
 
       print(iteration_time_string)
