@@ -99,7 +99,10 @@ if __name__ == "__main__":
     is_weekend = is_a_weekend(iteration_timestamp)
     is_after_10AM = iteration_timestamp.hour >= 10
     if (is_weekend or is_after_10AM):
-      time_in_seconds_until_midnight = get_time_in_seconds_until_target_time(iteration_timestamp, JUST_BEFORE_MIDNIGHT) + 1
+      time_in_seconds_until_midnight = get_time_in_seconds_until_target_time(
+        iteration_timestamp, 
+        ONE_SECOND_BEFORE_MIDNIGHT
+      ) + 1
 
       print(iteration_time_string)
       printn("Waiting til tomorrow...")
