@@ -96,9 +96,9 @@ if __name__ == "__main__":
     iteration_timestamp = datetime.now()
     iteration_time_string = iteration_timestamp.strftime("%m/%d/%Y %H:%M:%S")
 
-    is_weekend = is_a_weekend(iteration_timestamp)
+    is_on_sunday_or_monday = is_a_day_of_week(iteration_timestamp, [DayOfWeek.SUNDAY, DayOfWeek.MONDAY])
     is_after_10AM = iteration_timestamp.hour >= 10
-    if (is_weekend or is_after_10AM):
+    if (is_on_sunday_or_monday or is_after_10AM):
       time_in_seconds_until_midnight = get_time_in_seconds_until_target_time(
         iteration_timestamp, 
         ONE_SECOND_BEFORE_MIDNIGHT
