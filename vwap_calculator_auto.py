@@ -54,10 +54,10 @@ def calculate_VWAP_result(aggs: List[Agg]) -> VWAPResult:
 def calculate_vest_date(count: int) -> str:
   est_vest_date = datetime.today()
   while (count < 20):
+    est_vest_date = est_vest_date + timedelta(days=1)
     is_weekend = is_a_weekend(est_vest_date)
     is_holiday = is_us_holiday(est_vest_date)
 
-    est_vest_date = est_vest_date + timedelta(days=1)
     if (not is_weekend and not is_holiday):
       count += 1
   
